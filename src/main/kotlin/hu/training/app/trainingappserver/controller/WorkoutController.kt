@@ -1,6 +1,7 @@
 package hu.training.app.trainingappserver.controller
 
 import hu.training.app.trainingappserver.dto.WorkoutDto
+import hu.training.app.trainingappserver.dto.request.CreateWorkoutExercise
 import hu.training.app.trainingappserver.service.WorkoutService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -34,5 +35,13 @@ class WorkoutController(
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody updatedWorkoutDto: WorkoutDto): ResponseEntity<WorkoutDto> {
         return ResponseEntity.ok(workoutService.update(id, updatedWorkoutDto))
+    }
+
+    @PatchMapping("/{id}")
+    fun addExercises(
+            @PathVariable id: Long,
+            @RequestBody workoutExercises: List<CreateWorkoutExercise>
+    ): ResponseEntity<WorkoutDto> {
+        return ResponseEntity.ok(workoutService.addExercises(id, workoutExercises))
     }
 }

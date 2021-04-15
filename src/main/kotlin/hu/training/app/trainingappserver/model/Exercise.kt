@@ -21,5 +21,5 @@ class Exercise(
         var description: String = "",
 
         @OneToMany(mappedBy = "exercise", cascade = [CascadeType.REMOVE])
-        var workouts: Set<WorkoutExercise> = setOf()
+        var workouts: MutableSet<WorkoutExercise> = mutableSetOf()
 )

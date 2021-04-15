@@ -1,8 +1,12 @@
 package hu.training.app.trainingappserver.service
 
 import hu.training.app.trainingappserver.dto.WorkoutDto
+import hu.training.app.trainingappserver.dto.request.CreateWorkoutExercise
 import hu.training.app.trainingappserver.dto.toDTO
 import hu.training.app.trainingappserver.model.Workout
+import hu.training.app.trainingappserver.model.WorkoutExercise
+import hu.training.app.trainingappserver.repository.ExerciseRepository
+import hu.training.app.trainingappserver.repository.WorkoutExerciseRepository
 import hu.training.app.trainingappserver.repository.WorkoutRepository
 import org.modelmapper.ModelMapper
 import org.springframework.data.repository.findByIdOrNull
@@ -14,6 +18,8 @@ import javax.transaction.Transactional
 @Service
 class WorkoutServiceImpl(
         private val workoutRepository: WorkoutRepository,
+        private val exerciseRepository: ExerciseRepository,
+        private val workoutExerciseRepository: WorkoutExerciseRepository,
         private val mapper: ModelMapper
 ) : WorkoutService {
 
@@ -57,6 +63,25 @@ class WorkoutServiceImpl(
             workoutRepository.save(workout)
             workout.toDTO(mapper)
         }
+    }
+
+    override fun addExercises(id: Long, createWorkoutExercises: List<CreateWorkoutExercise>): WorkoutDto {
+        val workout = getWorkoutById(id)
+        var workoutExercises = createWorkoutExercises.mapNotNull {
+            val exercise = exerciseRepository.findByIdOrNull(it.id)
+            if (exercise != null)
+                WorkoutExercise(
+                        workout = workout,
+                        exercise = exercise,
+                        amount = it.amount,
+                        type = it.type
+                )
+            else
+                null
+        }
+        workoutExercises = workoutExerciseRepository.saveAll(workoutExercises)
+        workout.exercises.addAll(workoutExercises)
+        return workout.toDTO(mapper)
     }
 
     private fun getWorkoutById(id: Long): Workout {
