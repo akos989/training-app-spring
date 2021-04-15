@@ -18,5 +18,8 @@ class Exercise(
         var video: String = "",
 
         @Column(nullable = false)
-        var description: String = ""
+        var description: String = "",
+
+        @OneToMany(mappedBy = "exercise", cascade = [CascadeType.REMOVE])
+        var workouts: Set<WorkoutExercise> = setOf()
 )

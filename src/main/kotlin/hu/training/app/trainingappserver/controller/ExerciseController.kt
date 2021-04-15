@@ -1,11 +1,9 @@
 package hu.training.app.trainingappserver.controller
 
-import hu.training.app.trainingappserver.model.Exercise
+import hu.training.app.trainingappserver.dto.ExerciseDto
 import hu.training.app.trainingappserver.service.ExerciseService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(ExerciseController.BASE_URL)
@@ -18,7 +16,23 @@ class ExerciseController(
     }
 
     @GetMapping
-    fun getExercises(): ResponseEntity<List<Exercise>> {
+    fun getExercises(): ResponseEntity<List<ExerciseDto>> {
         return ResponseEntity.ok(exerciseService.getExercises())
+    }
+
+    @PostMapping
+    fun save(@RequestBody exerciseDto: ExerciseDto): ResponseEntity<ExerciseDto> {
+        return ResponseEntity.ok(exerciseService.saveExercise(exerciseDto))
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long): ResponseEntity<Unit> {
+        exerciseService.deleteExercise(id)
+        return ResponseEntity.ok(Unit)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @RequestBody updatedExerciseDto: ExerciseDto): ResponseEntity<ExerciseDto> {
+        return ResponseEntity.ok(exerciseService.update(id, updatedExerciseDto))
     }
 }
