@@ -9,5 +9,8 @@ class MuscleGroup (
             val id: Long = -1L,
 
             @Column(nullable = false)
-            var name: String = ""
+            var name: String = "",
+
+            @ManyToMany(mappedBy = "muscleGroups")
+            var exercises: MutableSet<Exercise> = mutableSetOf()
 )

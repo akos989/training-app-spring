@@ -1,10 +1,7 @@
 package hu.training.app.trainingappserver.dto
 
-import hu.training.app.trainingappserver.model.Equipment
 import hu.training.app.trainingappserver.model.Exercise
-import hu.training.app.trainingappserver.model.MuscleGroup
 import org.modelmapper.ModelMapper
-import org.modelmapper.TypeToken
 
 class ExerciseDto(
         var name: String = "",
@@ -16,9 +13,14 @@ class ExerciseDto(
 )
 
 fun List<Exercise>.toDTO(mapper: ModelMapper): List<ExerciseDto> {
-    val listType = object : TypeToken<List<ExerciseDto>>() {}.type
-    return mapper.map(this, listType)
+    return this.map {
+        it.toDTO(mapper)
+    }
 }
 
-fun Exercise.toDTO(mapper: ModelMapper): ExerciseDto =
-        mapper.map(this, ExerciseDto::class.java)
+fun Exercise.toDTO(mapper: ModelMapper): ExerciseDto {
+    val mapped = mapper.map(this, ExerciseDto::class.java)
+    mapped.equipments = this.equipments.toStringDTO()
+    mapped.muscleGroups = this.muscleGroups.toStringDTO()
+    return mapped
+}

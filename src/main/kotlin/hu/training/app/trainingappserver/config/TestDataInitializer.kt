@@ -1,11 +1,7 @@
 package hu.training.app.trainingappserver.config
 
-import hu.training.app.trainingappserver.model.Exercise
-import hu.training.app.trainingappserver.model.Workout
-import hu.training.app.trainingappserver.model.WorkoutExercise
-import hu.training.app.trainingappserver.repository.ExerciseRepository
-import hu.training.app.trainingappserver.repository.WorkoutExerciseRepository
-import hu.training.app.trainingappserver.repository.WorkoutRepository
+import hu.training.app.trainingappserver.model.*
+import hu.training.app.trainingappserver.repository.*
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Profile
@@ -16,17 +12,37 @@ import org.springframework.stereotype.Component
 class TestDataInitializer(
         private val exerciseRepository: ExerciseRepository,
         private val workoutRepository: WorkoutRepository,
-        private val workoutExerciseRepository: WorkoutExerciseRepository
+        private val workoutExerciseRepository: WorkoutExerciseRepository,
+        private val equipmentRepository: EquipmentRepository,
+        private val muscleGroupRepository: MuscleGroupRepository
 ) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
+        val equipments = equipmentRepository.saveAll(
+                listOf(
+                        Equipment(name = "Dumbbell", image = "dumbbell.jpg"),
+                        Equipment(name = "Medicine ball", image = "Medicine_ball.jpg"),
+                        Equipment(name = "Pull up bar", image = "pull_up_bar.jpg")
+                )
+        )
+
+        val muscleGroups = muscleGroupRepository.saveAll(
+                listOf(
+                        MuscleGroup(name = "Chest"),
+                        MuscleGroup(name = "Biceps"),
+                        MuscleGroup(name = "Triceps"),
+                        MuscleGroup(name = "Legs"),
+                        MuscleGroup(name = "Abs")
+                )
+        )
+
         val exercises = exerciseRepository.saveAll(
                 listOf(
-                        Exercise(name = "Push Up", image = "image-1.jpg", video = "video-1.mov", description = "Push up is a very basic body weight exercise to strengthen chest muscles."),
-                        Exercise(name = "Pull Up", image = "image-2.jpg", video = "video-2.mov", description = "Pull up is a very basic body weight exercise to strengthen upper back muscles."),
-                        Exercise(name = "Sit Ups", image = "image-3.jpg", video = "video-3.mov", description = "Sit ups is a very basic body weight exercise to strengthen abdominal muscles."),
-                        Exercise(name = "Dead Lift", image = "image-4.jpg", video = "video-4.mov", description = "Dead Lift is a gym exercise to strengthen back muscles."),
-                        Exercise(name = "Biceps Curls", image = "image-5.jpg", video = "video-5.mov", description = "Biceps Curls is a basic exercise with a dumbbell to strengthen gain larger biceps."),
+                        Exercise(name = "Push Up", image = "image-1.jpg", video = "video-1.mov", description = "Push up is a very basic body weight exercise to strengthen chest muscles.", equipments = mutableSetOf(equipments[0], equipments[2]), muscleGroups = mutableSetOf(muscleGroups[0], muscleGroups[1], muscleGroups[3])),
+                        Exercise(name = "Pull Up", image = "image-2.jpg", video = "video-2.mov", description = "Pull up is a very basic body weight exercise to strengthen upper back muscles.", equipments = mutableSetOf(equipments[1], equipments[2]), muscleGroups = mutableSetOf(muscleGroups[0], muscleGroups[2])),
+                        Exercise(name = "Sit Ups", image = "image-3.jpg", video = "video-3.mov", description = "Sit ups is a very basic body weight exercise to strengthen abdominal muscles.", equipments = mutableSetOf(equipments[0], equipments[2]), muscleGroups = mutableSetOf(muscleGroups[0], muscleGroups[1], muscleGroups[2])),
+                        Exercise(name = "Dead Lift", image = "image-4.jpg", video = "video-4.mov", description = "Dead Lift is a gym exercise to strengthen back muscles.", equipments = mutableSetOf(equipments[2]), muscleGroups = mutableSetOf(muscleGroups[0], muscleGroups[4], muscleGroups[3])),
+                        Exercise(name = "Biceps Curls", image = "image-5.jpg", video = "video-5.mov", description = "Biceps Curls is a basic exercise with a dumbbell to strengthen gain larger biceps.", equipments = mutableSetOf(equipments[1], equipments[2]), muscleGroups = mutableSetOf(muscleGroups[1], muscleGroups[4]))
                 )
         )
 

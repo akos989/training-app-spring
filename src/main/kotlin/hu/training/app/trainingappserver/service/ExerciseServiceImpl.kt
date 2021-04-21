@@ -19,7 +19,8 @@ class ExerciseServiceImpl(
 ) : ExerciseService {
 
     override fun getExercises(): List<ExerciseDto> {
-        return exerciseRepository.findAll().toDTO(mapper)
+        val exercises = exerciseRepository.findAll()
+        return exercises.toDTO(mapper)
     }
 
     @Transactional

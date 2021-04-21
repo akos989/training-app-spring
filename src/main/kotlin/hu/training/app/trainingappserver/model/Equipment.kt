@@ -12,5 +12,8 @@ class Equipment (
         var name: String = "",
 
         @Column(nullable = false)
-        var image: String = ""
+        var image: String = "",
+
+        @ManyToMany(mappedBy = "equipments")
+        var exercises: MutableSet<Exercise> = mutableSetOf()
 )
