@@ -5,6 +5,7 @@ import hu.training.app.trainingappserver.service.MuscleGroupService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
+@CrossOrigin(origins = ["http://localhost:8100"], maxAge = 3600)
 @RestController
 @RequestMapping(MuscleGroupController.BASE_URL)
 class MuscleGroupController(

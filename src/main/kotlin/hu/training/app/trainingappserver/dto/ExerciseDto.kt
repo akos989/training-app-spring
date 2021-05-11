@@ -9,7 +9,9 @@ class ExerciseDto(
         var video: String = "",
         var description: String = "",
         var muscleGroups: List<String> = listOf(),
-        var equipments: List<String> = listOf()
+        var equipments: List<String> = listOf(),
+        var amount: Int = 0,
+        var type: String = "INTERVAL"
 )
 
 fun List<Exercise>.toDTO(mapper: ModelMapper): List<ExerciseDto> {

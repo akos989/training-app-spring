@@ -23,7 +23,10 @@ fun List<Workout>.toDTO(mapper: ModelMapper): List<WorkoutDto> {
 fun Workout.toDTO(mapper: ModelMapper): WorkoutDto {
     val mapped = mapper.map(this, WorkoutDto::class.java)
     mapped.exercises = this.exercises.map {
-        it.exercise.toDTO(mapper)
+        val mappedExerciseDto = it.exercise.toDTO(mapper)
+        mappedExerciseDto.amount = it.amount
+        mappedExerciseDto.type = it.type
+        mappedExerciseDto
     }
     val equipments = mutableListOf<String>()
     mapped.exercises.forEach {

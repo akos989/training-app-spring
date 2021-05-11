@@ -5,8 +5,8 @@ import org.modelmapper.ModelMapper
 import org.modelmapper.TypeToken
 
 class EquipmentDto(
-        val name: String,
-        val image: String
+        val name: String = "",
+        val image: String = ""
 )
 
 fun List<Equipment>.toDTO(mapper: ModelMapper): List<EquipmentDto> {
